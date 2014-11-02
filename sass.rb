@@ -23,7 +23,7 @@ if ARGV[0] == 'start'
 	def do_POST(request, response)
 	
 		if URI.unescape(request.header["auth"][0]) != $auth
-			raise 'Bad Auth' + URI.unescape(request.header["auth"][0]) + ' ' + $auth
+			raise 'Bad Auth'# + URI.unescape(request.header["auth"][0]) + ' ' + $auth
 		end
 	
 		sourceFileName = URI.unescape(request.query['sourceFileName'])
