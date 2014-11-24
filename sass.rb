@@ -2,6 +2,8 @@ require 'webrick'
 require 'sass'
 require 'json'
 require 'pathname'
+require 'compass'
+require 'tmpdir'
 
 if ARGV[0] == 'start'
 
@@ -23,7 +25,7 @@ if ARGV[0] == 'start'
 	def do_POST(request, response)
 	
 		if URI.unescape(request.header["auth"][0]) != $auth
-			raise 'Bad Auth'# + URI.unescape(request.header["auth"][0]) + ' ' + $auth
+			raise 'Bad Auth'
 		end
 	
 		sourceFileName = URI.unescape(request.query['sourceFileName'])
@@ -33,11 +35,18 @@ if ARGV[0] == 'start'
         mapFileName = URI.unescape(request.query['mapFileName'])
 		
 		first = Pathname.new File.dirname(sourceFileName)
-		
+				
 		begin
-			engine = Sass::Engine.for_file(sourceFileName,
-				:sourcemap => :file,
-				:cache_location => File.dirname(sourceFileName) + '\\.sass-cache')
+			options = Compass.sass_engine_options
+			options[:sourcemap] = :file
+			options[:cache_location] = Dir.tmpdir + '\\.sass-cache'
+			options[:line_numbers] = false
+			options[:debug_info] = false
+			options[:trace_selectors] = false
+			options[:line_comments] = false
+			#options[:style] = :compressed
+
+			engine = Sass::Engine.for_file(sourceFileName, options)
 			resultCss, resultMap = engine.render_with_sourcemap(File.basename(mapFileName))
 		    
 			resultMapJson = resultMap.to_json(

@@ -37,8 +37,14 @@ if($OutputVariable.StartsWith("f")) {
     .\gem install webrick
 }
 
-.\gem update sass
+$OutputVariable = (.\gem list compass -i) | Out-String
+if($OutputVariable.StartsWith("f")) {
+    .\gem install compass
+}
 
-.\ocra ..\..\sass.rb --output ..\..\sass.exe
+.\gem update sass
+.\gem update compass
+
+.\ocra ..\..\sass.rb --output ..\..\sass.exe --gem-full
 
 cd ..\..
