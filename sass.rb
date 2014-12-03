@@ -4,6 +4,7 @@ require 'json'
 require 'pathname'
 require 'compass'
 require 'tmpdir'
+require 'compass/import-once/activate'
 
 if ARGV[0] == 'start'
 
