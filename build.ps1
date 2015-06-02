@@ -1,14 +1,11 @@
 if(!(Test-Path -Path Ruby.7z )){
-    Invoke-WebRequest http://dl.bintray.com/oneclick/rubyinstaller/ruby-2.1.5-i386-mingw32.7z?direct -OutFile Ruby.7z
+    Invoke-WebRequest http://dl.bintray.com/oneclick/rubyinstaller/ruby-2.2.2-i386-mingw32.7z?direct -OutFile Ruby.7z
 }
 
 if(!(Test-Path -Path Ruby )){
     .\7z x Ruby.7z
-    Rename-Item ruby-2.1.5-i386-mingw32 Ruby
+    Rename-Item ruby-2.2.2-i386-mingw32 Ruby
     Copy-Item thread.rb .\Ruby\bin
-	
-	# HACK: Ruby Gems seems to have switch off ssl3 so https is now broken - Need to press Y for the first run.
-	.\Ruby\bin\gem source -a http://rubygems.org/
 }
 
 if(!(Test-Path -Path DevKit.exe )){
